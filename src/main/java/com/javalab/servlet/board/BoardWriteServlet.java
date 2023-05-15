@@ -3,6 +3,7 @@ package com.javalab.servlet.board;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +26,7 @@ public class BoardWriteServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 
-	private BoardDao boardDao = BoardDao.getInstance();
+	//private BoardDao boardDao = BoardDao.getInstance();
     
 	/**
 	 * GET 접근 시 (게시물 입력폼 요청시 응답 메소드)
@@ -58,8 +59,8 @@ public class BoardWriteServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 		throws ServletException, IOException {
 		
-		// POST 한글 파라미터 깨짐 처리
-		request.setCharacterEncoding("utf-8");
+		// POST 한글 파라미터 깨짐 처리[필터로 대체되어 주석처리]
+		//request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset:utf-8");
 		
 		// 파라미터 받기
@@ -79,6 +80,11 @@ public class BoardWriteServlet extends HttpServlet {
 		
 		// 파리미터가 제대로 전달되는지 검증
 		//System.out.println(title + "  " + content + " " + id);
+		
+		// [추가] 서블릿 컨텍스트 얻기(어플리케이션에서 사용하는 종합정보함)
+		ServletContext sc = this.getServletContext();
+		// [추가] 서블릿 컨텍스트에서 BoardDao 객체 얻기
+		BoardDao boardDao = (BoardDao)sc.getAttribute("boardDao");
 		
 		// 전달받은 파라미터로 BoardVo 객체 생성
 		BoardVo vo = new BoardVo(title, content, id);
